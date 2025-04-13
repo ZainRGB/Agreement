@@ -1,0 +1,38 @@
+﻿@model Agreement.Models.AgreementRecord
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <h4>Validation Errors:</h4>
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+<h2>Agreement Form</h2>
+
+<form method="POST" asp-action="Create" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Username"></label>
+        <input asp-for="Username" class="form-control" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+
+    <!-- Similar fields for Surname and Email -->
+
+    <div class="form-group">
+        <label>MOU File</label>
+        <input type="file" name="Mou" class="form-control"
+               accept=".doc,.docx,.xls,.xlsx,.csv,.pdf,.txt" />
+    </div>
+
+    <div class="form-group">
+        <label>NDA File</label>
+        <input type="file" name="Nda" class="form-control"
+               accept=".doc,.docx,.xls,.xlsx,.csv,.pdf,.txt" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
