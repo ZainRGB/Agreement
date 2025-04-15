@@ -8,26 +8,114 @@ namespace Agreement.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public string Username { get; set; } = string.Empty;
+        public string active { get; set; } = string.Empty;
+        public string datecaputred { get; set; } = string.Empty;
+        public string timecaptured { get; set; } = string.Empty;
+        public string formname { get; set; } = string.Empty;
+        public string hosigned { get; set; } = string.Empty;
+        public string formid { get; set; } = string.Empty;
 
-        [Required]
-        public string Surname { get; set; } = string.Empty;
+        [Required(ErrorMessage = "First name is required")]
+        [StringLength(100, ErrorMessage = "First name cannot exceed 100 characters")]
+        public string drname { get; set; } = string.Empty;
 
-        [Required, EmailAddress]
-        public string Email { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Surname is required")]
+        [StringLength(100, ErrorMessage = "Surname cannot exceed 100 characters")]
+        public string drsurname { get; set; } = string.Empty;
 
-        public string? MouFileName { get; set; }
-        public string? MouStoredName { get; set; }
+        [Required(ErrorMessage = "ID number is required")]
+        [StringLength(50, ErrorMessage = "ID number cannot exceed 50 characters")]
+        public string dridnr { get; set; } = string.Empty;
 
-        public string? NdaFileName { get; set; }
-        public string? NdaStoredName { get; set; }
+        [Required(ErrorMessage = "BHFF number is required")]
+        [StringLength(50, ErrorMessage = "BHFF number cannot exceed 50 characters")]
+        public string bhff { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Address is required")]
+        [StringLength(500, ErrorMessage = "Address cannot exceed {1} characters. Please include street, city, and postal code.")]
+        [Display(Name = "Full Address")]
+        public string draddress { get; set; } = string.Empty;
+
+        // public string hpcsaexpire { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Expiry Date is required")]
+        [Display(Name = "Expiry Date")]
+        [DataType(DataType.Date)]
+        public DateTime hpcsaexpire { get; set; } = DateTime.UtcNow; // Default to UTC
+
+        //public string bohfexpire { get; set; } = string.Empty;
+        //public string ppiiexpire { get; set; } = string.Empty;
+
+        // public string hpcsaexpire { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Expiry Date is required")]
+        [Display(Name = "Expiry Date")]
+        [DataType(DataType.Date)]
+        public DateTime bohfexpire { get; set; } = DateTime.UtcNow; // Default to UTC
+
+        // public string hpcsaexpire { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Expiry Date is required")]
+        [Display(Name = "Expiry Date")]
+        [DataType(DataType.Date)]
+        public DateTime ppiiexpire { get; set; } = DateTime.UtcNow; // Default to UTC
+
+        [Required(ErrorMessage = "Cellphone number is required")]
+        [RegularExpression(@"^[0-9]{10}$", ErrorMessage = "Please enter a valid 10-digit cellphone number")]
+        [Display(Name = "Cellphone Number")]
+        public string drcell { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Email address is required")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address")]
+        [Display(Name = "Email Address")]
+        public string dremail { get; set; } = string.Empty;
+
+
+        [Required(ErrorMessage = "Physical Address is required")]
+        [StringLength(500, ErrorMessage = "Physical Address cannot exceed {1} characters. Please include street, city, and postal code.")]
+        [Display(Name = "Full Address")]
+        public string drphysicaddrs { get; set; } = string.Empty;
+
+
+        [Required(ErrorMessage = "Email address is required")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address")]
+        [Display(Name = "Email Address")]
+        public string physemail { get; set; } = string.Empty;
+
+        public string? emerfile { get; set; }
+        public string? emerfileStoredName { get; set; }
+        public string? qsfile { get; set; }
+        public string? qsfileStoredName { get; set; }
+        public string? idfile { get; set; }
+        public string? idfileStoredName { get; set; }
+        public string? ppiifile { get; set; }
+        public string? ppiifileStoredName { get; set; }
+        public string? bohffile { get; set; }
+        public string? bohffileStoredname { get; set; }
+        public string? hpcsafile { get; set; }
+        public string? hpcsafileStoredName { get; set; }
+
+
+        //public string? MouFileName { get; set; }
+        //public string? MouStoredName { get; set; }
+
+        //public string? NdaFileName { get; set; }
+        //public string? NdaStoredName { get; set; }
 
         [NotMapped]
-        public IFormFile? Mou { get; set; }
+        public IFormFile? boh { get; set; }
 
         [NotMapped]
-        public IFormFile? Nda { get; set; }
+        public IFormFile? ppi { get; set; }
+
+        [NotMapped]
+        public IFormFile? hpcsa { get; set; }
+
+        [NotMapped]
+        public IFormFile? idf { get; set; }
+
+        [NotMapped]
+        public IFormFile? qsf { get; set; }
+
+        [NotMapped]
+        public IFormFile? emer { get; set; }
     }
 
 

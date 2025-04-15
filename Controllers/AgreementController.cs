@@ -28,25 +28,72 @@ namespace Agreement.Controllers
             var uploadPath = _config["FileUploadPath"] ?? Path.Combine(_env.WebRootPath, "uploads");
             Directory.CreateDirectory(uploadPath);
 
-            // Process MOU
-            if (record.Mou != null)
+            // Process hpcsafile
+            if (record.hpcsa != null)
             {
-                record.MouFileName = record.Mou.FileName;
-                record.MouStoredName = $"{Guid.NewGuid()}{Path.GetExtension(record.Mou.FileName)}";
-                await SaveFile(record.Mou, Path.Combine(uploadPath, record.MouStoredName));
+                record.hpcsafile = record.hpcsa.FileName;
+                record.hpcsafileStoredName = $"{Guid.NewGuid()}{Path.GetExtension(record.hpcsa.FileName)}";
+                await SaveFile(record.hpcsa, Path.Combine(uploadPath, record.hpcsafileStoredName));
             }
 
-            // Process NDA
-            if (record.Nda != null)
+
+            // Process bohffile
+            if (record.boh != null)
             {
-                record.NdaFileName = record.Nda.FileName;
-                record.NdaStoredName = $"{Guid.NewGuid()}{Path.GetExtension(record.Nda.FileName)}";
-                await SaveFile(record.Nda, Path.Combine(uploadPath, record.NdaStoredName));
+                record.bohffile = record.boh.FileName;
+                record.bohffileStoredname = $"{Guid.NewGuid()}{Path.GetExtension(record.boh.FileName)}";
+                await SaveFile(record.boh, Path.Combine(uploadPath, record.bohffileStoredname));
             }
 
-            _context.Agreements.Add(record);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            // Process ppiifile
+            if (record.ppi != null)
+            {
+                record.ppiifile = record.ppi.FileName;
+                record.ppiifileStoredName = $"{Guid.NewGuid()}{Path.GetExtension(record.ppi.FileName)}";
+                await SaveFile(record.ppi, Path.Combine(uploadPath, record.ppiifileStoredName));
+            }
+
+            // Process idfile
+            if (record.idf != null)
+            {
+                record.idfile = record.idf.FileName;
+                record.idfileStoredName = $"{Guid.NewGuid()}{Path.GetExtension(record.idf.FileName)}";
+                await SaveFile(record.idf, Path.Combine(uploadPath, record.idfileStoredName));
+            }
+
+            // Process qsfile
+            if (record.qsf != null)
+            {
+                record.qsfile = record.qsf.FileName;
+                record.qsfileStoredName = $"{Guid.NewGuid()}{Path.GetExtension(record.qsf.FileName)}";
+                await SaveFile(record.qsf, Path.Combine(uploadPath, record.qsfileStoredName));
+            }
+
+            // Process emerfile
+            if (record.emer != null)
+            {
+                record.emerfile = record.emer.FileName;
+                record.emerfileStoredName = $"{Guid.NewGuid()}{Path.GetExtension(record.emer.FileName)}";
+                await SaveFile(record.emer, Path.Combine(uploadPath, record.emerfileStoredName));
+            }
+
+
+            //_context.Agreements.Add(record);
+            //await _context.SaveChangesAsync();
+            //return RedirectToAction("Index");
+            try
+            {
+                _context.Agreements.Add(record);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                ModelState.AddModelError("", "An error occurred while saving the data.");
+                return View("Index", record);
+            }
+
         }
 
         private async Task SaveFile(IFormFile file, string path)
