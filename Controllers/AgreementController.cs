@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Agreement.Models;
 using Agreement.Data;
+using System.Diagnostics;
 
 namespace Agreement.Controllers
 {
@@ -18,13 +19,23 @@ namespace Agreement.Controllers
             _env = env;
         }
 
+        // First Form (File Uploads)
         public IActionResult Index() => View();
+
+        // Second Form (Will add signature later)
+        public IActionResult Index2(int id)
+        {
+            var agreement = _context.Agreements.Find(id);
+            if (agreement == null)
+            {
+                return NotFound();
+            }
+            return View(agreement);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(AgreementRecord record)
         {
-            //if (!ModelState.IsValid) return View("Index", record);
-
             var uploadPath = _config["FileUploadPath"] ?? Path.Combine(_env.WebRootPath, "uploads");
             Directory.CreateDirectory(uploadPath);
 
@@ -35,7 +46,6 @@ namespace Agreement.Controllers
                 record.hpcsafileStoredName = $"{Guid.NewGuid()}{Path.GetExtension(record.hpcsa.FileName)}";
                 await SaveFile(record.hpcsa, Path.Combine(uploadPath, record.hpcsafileStoredName));
             }
-
 
             // Process bohffile
             if (record.boh != null)
@@ -77,23 +87,54 @@ namespace Agreement.Controllers
                 await SaveFile(record.emer, Path.Combine(uploadPath, record.emerfileStoredName));
             }
 
-
-            //_context.Agreements.Add(record);
-            //await _context.SaveChangesAsync();
-            //return RedirectToAction("Index");
             try
             {
                 _context.Agreements.Add(record);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+
+                // Changed to redirect to Index2 with the ID
+                return RedirectToAction("Index2", new { id = record.Id });
             }
             catch (Exception ex)
             {
-                // Log the exception
+                Debug.WriteLine($"Error saving agreement: {ex.Message}");
                 ModelState.AddModelError("", "An error occurred while saving the data.");
                 return View("Index", record);
             }
+        }
 
+        // Add this action for file downloads
+        public async Task<IActionResult> DownloadFile(string storedName)
+        {
+            var uploadPath = _config["FileUploadPath"] ?? Path.Combine(_env.WebRootPath, "uploads");
+            var filePath = Path.Combine(uploadPath, storedName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+
+            // Simple content type detection
+            var contentType = "application/octet-stream";
+            var ext = Path.GetExtension(filePath).ToLowerInvariant();
+            switch (ext)
+            {
+                case ".pdf": contentType = "application/pdf"; break;
+                case ".doc": contentType = "application/msword"; break;
+                case ".docx": contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"; break;
+                case ".xls": contentType = "application/vnd.ms-excel"; break;
+                case ".xlsx": contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; break;
+                case ".txt": contentType = "text/plain"; break;
+            }
+
+            return File(memory, contentType, storedName);
         }
 
         private async Task SaveFile(IFormFile file, string path)

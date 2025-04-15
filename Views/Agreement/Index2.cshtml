@@ -1,0 +1,63 @@
+﻿@model AgreementRecord
+
+<h2>Admission Privileges Agreement</h2>
+
+<!-- Display submitted data -->
+<div class="card">
+    <div class="card-body">
+        <h5>Admission privileges agreement made and entered into and between:</h5>
+        <ul>
+            <li>First Name : @Model.drname</li><br />
+            <li>Surname : @Model.drsurname</li><br />
+            <li>Identity Nr. : @Model.dridnr</li><br />
+            <li>BHFF Nr. : @Model.bhff</li><br />
+            <li>Address: @Model.draddress</li><br />
+            <li>Cell Nr.: @Model.drcell</li><br />
+            <li>Email Address: @Model.dremail</li><br />
+            <li>Physical Address: @Model.drphysicaddrs</li><br />
+            <li>Physical Email Address: @Model.physemail</li><br />
+
+
+
+            @if (!string.IsNullOrEmpty(Model.hpcsafile))
+            {
+                <li>Health Professional Council of South Africa certificate.<br /> @Model.hpcsafile (Expiry Date: @Model.hpcsaexpire.ToString("yyyy/MM/dd"))</li>
+            }
+           <br />
+            @if (!string.IsNullOrEmpty(Model.bohffile))
+            {
+                <li>Board of Health Funders certificate.<br /> @Model.bohffile (Expiry Date: @Model.bohfexpire.ToString("yyyy/MM/dd"))</li>
+            }
+
+            <br />
+            @if (!string.IsNullOrEmpty(Model.ppiifile))
+            {
+                <li>Proof of Professional Indemnity Insurance with appropriate cover over and above R15,000,000.00 (fifteen million Rands).<br /> @Model.ppiifile (Expiry Date: @Model.ppiiexpire.ToString("yyyy/MM/dd"))</li>
+            }
+
+            <br />
+            @if (!string.IsNullOrEmpty(Model.idfile))
+            {
+                <li>Identity document.<br /> @Model.idfile</li>
+            }
+
+            <br />
+            @if (!string.IsNullOrEmpty(Model.qsfile))
+            {
+                <li>All relevant qualifications, as well as specialisations (if applicable).<br /> @Model.qsfile</li>
+            }
+
+            <br />
+            @if (!string.IsNullOrEmpty(Model.emerfile))
+            {
+                <li>If application is made in regard to any specific discipline, such as Casualty/Emergency Medication, then copies of the prescribed qualifications (and registration certificates).<br /> @Model.emerfile</li>
+            }
+
+
+        </ul>
+    </div>
+</div>
+
+<!-- Add signature functionality here later -->
+
+<a href="@Url.Action("Index")" class="btn btn-secondary">Back</a>
