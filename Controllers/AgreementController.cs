@@ -22,7 +22,7 @@ namespace Agreement.Controllers
         // First Form (File Uploads)
         public IActionResult Index() => View();
 
-        // Second Form (Will add signature later)
+        // Second Form (With Signature)
         public IActionResult Index2(int id)
         {
             var agreement = _context.Agreements.Find(id);
@@ -31,6 +31,44 @@ namespace Agreement.Controllers
                 return NotFound();
             }
             return View(agreement);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index2(int id, AgreementRecord record)
+        {
+            if (id != record.Id)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                var existingAgreement = await _context.Agreements.FindAsync(id);
+                if (existingAgreement == null)
+                {
+                    return NotFound();
+                }
+
+                // Update only the signature-related fields
+                existingAgreement.SignatureData = record.SignatureData;
+                existingAgreement.SignedDate = DateTime.Now;
+
+                // Update doctor's name if needed
+                existingAgreement.drfullname = record.drfullname;
+
+                _context.Update(existingAgreement);
+                await _context.SaveChangesAsync();
+
+                //return RedirectToAction("Index2", new { id = record.Id });
+                return RedirectToAction("ThankYou", new { id = record.Id });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving signature: {ex.Message}");
+                ModelState.AddModelError("", "An error occurred while saving the signature.");
+                return View(record);
+            }
         }
 
         [HttpPost]
@@ -92,7 +130,6 @@ namespace Agreement.Controllers
                 _context.Agreements.Add(record);
                 await _context.SaveChangesAsync();
 
-                // Changed to redirect to Index2 with the ID
                 return RedirectToAction("Index2", new { id = record.Id });
             }
             catch (Exception ex)
@@ -103,7 +140,6 @@ namespace Agreement.Controllers
             }
         }
 
-        // Add this action for file downloads
         public async Task<IActionResult> DownloadFile(string storedName)
         {
             var uploadPath = _config["FileUploadPath"] ?? Path.Combine(_env.WebRootPath, "uploads");
@@ -121,7 +157,6 @@ namespace Agreement.Controllers
             }
             memory.Position = 0;
 
-            // Simple content type detection
             var contentType = "application/octet-stream";
             var ext = Path.GetExtension(filePath).ToLowerInvariant();
             switch (ext)
@@ -141,6 +176,19 @@ namespace Agreement.Controllers
         {
             using var stream = new FileStream(path, FileMode.Create);
             await file.CopyToAsync(stream);
+        }
+
+
+
+
+        public IActionResult ThankYou(int id)
+        {
+            var agreement = _context.Agreements.Find(id);
+            if (agreement == null)
+            {
+                return NotFound();
+            }
+            return View(agreement);
         }
     }
 }

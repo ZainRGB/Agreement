@@ -58,6 +58,108 @@
     </div>
 </div>
 
+
+
+
+
+
+
+<form asp-action="Index2" id="signatureForm" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="SignatureData" id="signatureData" />
+
+    <!-- Doctor Name Field -->
+    <div class="row mb-3">
+        <div class="col-md-6 form-group">
+            <label asp-for="drfullname" class="form-label">Dr Full Name *</label>
+            <input asp-for="drfullname" class="form-control" />
+            <span asp-validation-for="drfullname" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Signature Pad -->
+    <div class="form-group mb-3">
+        <label class="form-label">Signature *</label>
+        <div style="border:1px solid #ddd; background:#f8f9fa; width:100%; height:200px;">
+            <canvas id="signatureCanvas" style="width:100%; height:100%; touch-action:none;"></canvas>
+        </div>
+        <div class="mt-2">
+            <button type="button" id="clearBtn" class="btn btn-secondary">Clear</button>
+            <button type="button" id="saveBtn" class="btn btn-primary">Save Signature</button>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.SignatureData))
+        {
+            <div class="mt-2">
+                <img src="@Model.SignatureData" alt="Saved Signature" style="max-width:100%; border:1px solid #eee;" />
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit Form</button>
+</form>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const canvas = document.getElementById("signatureCanvas");
+            const signaturePad = new SignaturePad(canvas, {
+                backgroundColor: 'rgb(255, 255, 255)',
+                penColor: 'rgb(0, 0, 0)'
+            });
+
+            // Handle window resize
+            function resizeCanvas() {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                canvas.width = canvas.offsetWidth * ratio;
+                canvas.height = canvas.offsetHeight * ratio;
+                canvas.getContext("2d").scale(ratio, ratio);
+                signaturePad.clear();
+            }
+            window.addEventListener("resize", resizeCanvas);
+            resizeCanvas();
+
+            // Clear button
+            document.getElementById("clearBtn").addEventListener("click", function() {
+                signaturePad.clear();
+                document.getElementById("signatureData").value = "";
+            });
+
+            // Save button
+            document.getElementById("saveBtn").addEventListener("click", function() {
+                if (signaturePad.isEmpty()) {
+                    alert("Please provide a signature first.");
+                } else {
+                    document.getElementById("signatureData").value = signaturePad.toDataURL("image/png");
+                    alert("Signature saved successfully!");
+                }
+            });
+
+            // Form submission handler
+            document.getElementById("signatureForm").addEventListener("submit", function(e) {
+                if (!document.getElementById("signatureData").value) {
+                    e.preventDefault();
+                    alert("Please save your signature before submitting.");
+                }
+            });
+        });
+    </script>
+}
+
+
+
 <!-- Add signature functionality here later -->
+
+
+
+
+
+
+@* <br /><br /><br />
+
+<label asp-for="drfullname" class="form-label">FULL NAME *</label>
+<input asp-for="drfullname" class="form-control" required />
+<span asp-validation-for="drfullname" class="text-danger"></span> *@
+
 
 <a href="@Url.Action("Index")" class="btn btn-secondary">Back</a>

@@ -1,0 +1,38 @@
+﻿@model Agreement.Models.AgreementRecord
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-body text-center">
+            <h1 class="text-success mb-4">Thank You!</h1>
+            <i class="fas fa-check-circle fa-5x text-success mb-4"></i>
+
+            <p class="lead">Your agreement has been successfully submitted.</p>
+            <p>Reference Number: <strong>@Model.Id</strong></p>
+
+            @if (!string.IsNullOrEmpty(Model.SignatureData))
+            {
+                <div class="mt-4">
+                    <h5>Your Signed Document:</h5>
+                    <img src="@Model.SignatureData" alt="Your Signature" class="img-fluid border p-2" style="max-width: 300px;">
+                </div>
+            }
+
+            <div class="mt-4">
+                <a href="/" class="btn btn-primary">Return to Home</a>
+                <a href="@Url.Action("DownloadFile", new { storedName = Model.hpcsafileStoredName })"
+                   class="btn btn-secondary">Download HPCSA Document</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            max-width: 600px;
+            margin: 0 auto;
+            border: none;
+            border-radius: 10px;
+        }
+    </style>
+}

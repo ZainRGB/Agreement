@@ -36,22 +36,16 @@ namespace Agreement.Models
         [Display(Name = "Full Address")]
         public string draddress { get; set; } = string.Empty;
 
-        // public string hpcsaexpire { get; set; } = string.Empty;
         [Required(ErrorMessage = "Expiry Date is required")]
         [Display(Name = "Expiry Date")]
         [DataType(DataType.Date)]
         public DateTime hpcsaexpire { get; set; } = DateTime.UtcNow; // Default to UTC
 
-        //public string bohfexpire { get; set; } = string.Empty;
-        //public string ppiiexpire { get; set; } = string.Empty;
-
-        // public string hpcsaexpire { get; set; } = string.Empty;
         [Required(ErrorMessage = "Expiry Date is required")]
         [Display(Name = "Expiry Date")]
         [DataType(DataType.Date)]
         public DateTime bohfexpire { get; set; } = DateTime.UtcNow; // Default to UTC
 
-        // public string hpcsaexpire { get; set; } = string.Empty;
         [Required(ErrorMessage = "Expiry Date is required")]
         [Display(Name = "Expiry Date")]
         [DataType(DataType.Date)]
@@ -91,13 +85,7 @@ namespace Agreement.Models
         public string? bohffileStoredname { get; set; }
         public string? hpcsafile { get; set; }
         public string? hpcsafileStoredName { get; set; }
-
-
-        //public string? MouFileName { get; set; }
-        //public string? MouStoredName { get; set; }
-
-        //public string? NdaFileName { get; set; }
-        //public string? NdaStoredName { get; set; }
+       
 
         [NotMapped]
         public IFormFile? boh { get; set; }
@@ -116,6 +104,17 @@ namespace Agreement.Models
 
         [NotMapped]
         public IFormFile? emer { get; set; }
+
+        //index2
+        [Required(ErrorMessage = "First name is required")]
+        [StringLength(100, ErrorMessage = "First name cannot exceed 100 characters")]
+        public string drfullname { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Signature is required")]
+        public string SignatureData { get; set; } = string.Empty;
+        public DateTime? SignedDate { get; set; } // Nullable until signed
+
+
     }
 
 
