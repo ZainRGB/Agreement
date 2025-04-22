@@ -1,4 +1,7 @@
 ﻿@model Agreement.Models.AgreementRecord
+@{
+    ViewData["Title"] = "Thank You";
+}
 
 <div class="container mt-5">
     <div class="card shadow">
@@ -12,15 +15,68 @@
             @if (!string.IsNullOrEmpty(Model.SignatureData))
             {
                 <div class="mt-4">
-                    <h5>Your Signed Document:</h5>
+                    <h5>Your Signature:</h5>
                     <img src="@Model.SignatureData" alt="Your Signature" class="img-fluid border p-2" style="max-width: 300px;">
                 </div>
             }
 
-            <div class="mt-4">
-                <a href="/" class="btn btn-primary">Return to Home</a>
-                <a href="@Url.Action("DownloadFile", new { storedName = Model.hpcsafileStoredName })"
-                   class="btn btn-secondary">Download HPCSA Document</a>
+            <div class="mt-4 d-flex flex-column gap-2">
+                <a href="@Url.Action("DownloadAgreementPdf")"
+                   class="btn btn-primary btn-lg">
+                    <i class="fas fa-file-pdf me-2"></i> Download Agreement PDF
+                </a>
+
+                @if (!string.IsNullOrEmpty(Model.hpcsafileStoredName))
+                {
+                    <a href="@Url.Action("DownloadFile", new { storedName = Model.hpcsafileStoredName })"
+                       class="btn btn-secondary">
+                        <i class="fas fa-file-alt me-2"></i> Download HPCSA Document
+                    </a>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.hpcsafileStoredName))
+                {
+                    <a href="@Url.Action("DownloadFile", new { storedName = Model.bohffileStoredname })"
+                       class="btn btn-secondary">
+                        <i class="fas fa-file-alt me-2"></i> Download Board of Health Funders certificate.
+                    </a>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.ppiifileStoredName))
+                {
+                    <a href="@Url.Action("DownloadFile", new { storedName = Model.ppiifileStoredName })"
+                       class="btn btn-secondary">
+                        <i class="fas fa-file-alt me-2"></i> Download Proof of Professional Indemnity.
+                    </a>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.idfileStoredName))
+                {
+                    <a href="@Url.Action("DownloadFile", new { storedName = Model.idfileStoredName })"
+                       class="btn btn-secondary">
+                        <i class="fas fa-file-alt me-2"></i> Download Identity document.
+                    </a>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.qsfileStoredName))
+                {
+                    <a href="@Url.Action("DownloadFile", new { storedName = Model.qsfileStoredName })"
+                       class="btn btn-secondary">
+                        <i class="fas fa-file-alt me-2"></i> Download All relevant qualifications.
+                    </a>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.emerfileStoredName))
+                {
+                    <a href="@Url.Action("DownloadFile", new { storedName = Model.emerfileStoredName })"
+                       class="btn btn-secondary">
+                        <i class="fas fa-file-alt me-2"></i> Download specific discipline.
+                    </a>
+                }
+
+                <a href="/" class="btn btn-outline-secondary mt-3">
+                    <i class="fas fa-home me-2"></i> Return to Home
+                </a>
             </div>
         </div>
     </div>
@@ -33,6 +89,11 @@
             margin: 0 auto;
             border: none;
             border-radius: 10px;
+        }
+
+        .btn-lg {
+            padding: 0.5rem 1.5rem;
+            font-size: 1.1rem;
         }
     </style>
 }

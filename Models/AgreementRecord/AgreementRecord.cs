@@ -114,6 +114,18 @@ namespace Agreement.Models
         public string SignatureData { get; set; } = string.Empty;
         public DateTime? SignedDate { get; set; } // Nullable until signed
 
+        [Required(ErrorMessage = "Date is required")]
+        [Display(Name = "Signed Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime signedat { get; set; } = DateTime.Today; // Initialize with today's date
+
+        //[Required(ErrorMessage = "Agreement is required")]
+        [Display(Name = "Agreement")]
+        public string agree { get; set; } = "Yes";// Initialize with "Yes" instead of string.Empty
+
+
+
 
     }
 

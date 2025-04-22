@@ -64,9 +64,28 @@
 
 
 
-<form asp-action="Index2" id="signatureForm" method="post">
+<form asp-action="Index2" id="signatureForm" method="post" style="display:inline;">
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="SignatureData" id="signatureData" />
+
+
+    <div class="row mb-3">
+        <div class="col-md-6 form-group">
+            <label asp-for="signedat">SIGNED AT KENILWORTH ON *</label>
+            <input type="date" asp-for="signedat" class="form-control" />
+            <span asp-validation-for="signedat" class="text-danger"></span>
+        </div>
+    </div>
+
+    <br><br>
+    <b>For: the Hospital</b><br><br>
+    <img src="@Model.hosigned" class="signature">
+    <br><hr class="hosigned"><br><b>Ismail Ebrahim Bhorat</b>
+    <br><b>(duly authorised representative)</b>
+    <br><br>
+
+
+
 
     <!-- Doctor Name Field -->
     <div class="row mb-3">
@@ -95,8 +114,32 @@
         }
     </div>
 
+
+    <div class="row mb-3">
+        
+            <label for="agree">I hereby acknowledge that I have read and understand this Agreement and agree to be bound by its terms and conditions.</label><br>
+            <div class="form-check">
+                <hr />
+            <div class="form-check">
+                <input class="form-check-input" type="radio" asp-for="agree" value="Yes" id="agreeYes" checked>
+                <label class="form-check-label" for="agreeYes">Yes</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" asp-for="agree" value="No" id="agreeNo">
+                <label class="form-check-label" for="agreeNo">No</label>
+            </div>
+                <hr />
+           
+        </div>
+    </div>
+
+
+
+
     <button type="submit" class="btn btn-success">Submit Form</button>
 </form>
+
+<a href="@Url.Action("Index")" class="btn btn-secondary">Back</a>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
@@ -162,4 +205,3 @@
 <span asp-validation-for="drfullname" class="text-danger"></span> *@
 
 
-<a href="@Url.Action("Index")" class="btn btn-secondary">Back</a>
